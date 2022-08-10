@@ -38,9 +38,16 @@ export async function getStaticProps() {
     return data
   })(require.context('../data', true, /\.md$/))
 
+  /**
+   * 記事の並びを作成順(idの降順)にソートする関数
+   */
+  const orderedBlogs = blogs.sort((a, b) => {
+    return b.frontmatter.id - a.frontmatter.id
+  })
+
   return {
     props: {
-      blogs: blogs,
+      blogs: JSON.parse(JSON.stringify(orderedBlogs)),
     },
   }
 }
