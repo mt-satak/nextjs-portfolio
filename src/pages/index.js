@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import * as style from "../styles/Index.module.css"
+// import * as style from "../styles/Index.module.css"
 
 const Index = () => {
   return (
