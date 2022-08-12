@@ -1,6 +1,8 @@
+import Layout from "../components/layout"
+
 const Contact = () => {
   return (
-    <>
+    <Layout>
       <div>
         <div>
           <h1>Contact</h1>
@@ -16,7 +18,7 @@ const Contact = () => {
           </form>
         </div>
       </div>
-    </>
+    </Layout>
   )
 }
 

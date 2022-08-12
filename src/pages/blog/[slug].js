@@ -1,10 +1,11 @@
 import Image from "next/image"
+import Layout from "../components/layout"
 import matter from "gray-matter"
 import ReactMarkdown from "react-markdown"
 
 const SingleBlog = (props) => {
   return (
-    <>
+    <Layout>
       <div>
         <Image src={props.frontmatter.image} alt="blogimage" height="500" width="1000" />
       </div>
@@ -13,7 +14,7 @@ const SingleBlog = (props) => {
         <p>{props.frontmatter.date}</p>
         <ReactMarkdown>{props.markdownBody}</ReactMarkdown>
       </div>
-    </>
+    </Layout>
   )
 }
 
