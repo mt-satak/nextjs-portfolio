@@ -1,9 +1,11 @@
 import Layout from "../components/layout"
+import Seo from "../components/seo"
 import * as style from "../styles/contact.module.scss"
 
 const Contact = () => {
   return (
     <Layout>
+      <Seo title="コンタクト" description="これはコンタクトページです" />
       <div className={style.wrapper}>
         <div className={style.container}>
           <h1>Contact</h1>
