@@ -11,7 +11,7 @@ const Contact = () => {
           <h1>Contact</h1>
           <p>お気軽にご連絡ください</p>
           <form>
-            <label htmlFor="name">お名前</label>  
+            <label htmlFor="name">お名前</label>
             <input type="text" name="name" id="name" required/>
             <label htmlFor="email">メールアドレス</label>
             <input type="email" name="email" id="email" required/>
