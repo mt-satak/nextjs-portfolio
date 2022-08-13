@@ -1,8 +1,10 @@
 import Layout from "../components/layout"
+import Seo from "../components/seo"
 
 // TODO: テキストではなく画像で404表示させたい
 const NotFoundPage = () => (
   <Layout>
+    <Seo title="ページが見つかりません" description="これは404ページです" />
     <div style={{textAlien: "center", height: "70vh"}}>
       <h1>404: Not Found</h1>
       <p>ページが見つかりません</p>
