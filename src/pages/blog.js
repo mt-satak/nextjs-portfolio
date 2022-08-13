@@ -26,7 +26,7 @@ const Blog = (props) => {
                 </div>
                 <div className={style.cardImg}>
                   <Image src={image} alt="card-image" height={300} width={1000} quality={90} />
-                </div>  
+                </div>
               </div>
             )}
           )}
