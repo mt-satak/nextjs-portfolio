@@ -1,9 +1,9 @@
 import Image from "next/image"
 import Layout from "../../components/layout"
-import matter from "gray-matter"
 import ReactMarkdown from "react-markdown"
 import Seo from "../../components/seo"
 import * as style from "../../styles/singleBlog.module.scss"
+import { getAllBlogs, getSingleBlog } from "../../utils/mdQueries"
 
 const SingleBlog = ({ frontmatter, markdownBody }) => {
   const { image, title, date, excerpt } = frontmatter
@@ -28,17 +28,9 @@ const SingleBlog = ({ frontmatter, markdownBody }) => {
 export default SingleBlog
 
 export async function getStaticPaths() {
-  const blogSlugs = ((context) => {
-    const keys = context.keys()
-    const data = keys.map((key, index) => {
-      let slug = key.replace(/^.*[\\\/]/, '').slice(0, -3)
+  const { orderedBlogs } = await getAllBlogs()
 
-      return slug
-    })
-    return data
-  })(require.context('../../data', true, /\.md$/))
-
-  const paths = blogSlugs.map((blogSlug) => `/blog/${blogSlug}`)
+  const paths = orderedBlogs.map((orderedBlog) => `/blog/${orderedBlog.slug}`)
 
   return {
     paths: paths,
@@ -47,9 +39,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  const { slug } = context.params
-  const data = await import(`../../data/${slug}.md`)
-  const singleDocument = matter(data.default)
+  const { singleDocument } = await getSingleBlog(context)
 
   return {
     props: {
