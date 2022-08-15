@@ -1,5 +1,8 @@
 import matter from "gray-matter"
 
+// 1ページあたりの記事表示件数
+export const blogsPerPage = 5
+
 export async function getAllBlogs() {
   const blogs = ((context) => {
     const keys = context.keys()
@@ -19,10 +22,15 @@ export async function getAllBlogs() {
     return data
   })(require.context('../data', true, /\.md$/))
 
-  const orderedBlogs = blogs.sort((a, b) => b.frontmatter - a.frontmatter)
+  // idの降順にソートした全記事を取得
+  const orderedBlogs = blogs.sort((a, b) => b.frontmatter.id - a.frontmatter.id)
+
+  // 全記事数に対して必要なページ数を計算
+  const numberPages = Math.ceil(orderedBlogs.length / blogsPerPage)
 
   const allBlogs = {
-    orderedBlogs: JSON.parse(JSON.stringify(orderedBlogs))
+    orderedBlogs: JSON.parse(JSON.stringify(orderedBlogs)),
+    numberPages,
   }
 
   return allBlogs
