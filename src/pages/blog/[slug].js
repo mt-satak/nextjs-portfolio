@@ -1,11 +1,12 @@
 import Image from "next/image"
 import Layout from "../../components/layout"
-import matter from "gray-matter"
+import PrevNext from "../../components/prevNext"
 import ReactMarkdown from "react-markdown"
 import Seo from "../../components/seo"
 import * as style from "../../styles/singleBlog.module.scss"
+import { getAllBlogs, getSingleBlog } from "../../utils/mdQueries"
 
-const SingleBlog = ({ frontmatter, markdownBody }) => {
+const SingleBlog = ({ frontmatter, markdownBody, prev, next }) => {
   const { image, title, date, excerpt } = frontmatter
 
   return (
@@ -21,6 +22,8 @@ const SingleBlog = ({ frontmatter, markdownBody }) => {
           <ReactMarkdown>{markdownBody}</ReactMarkdown>
         </div>
       </div>
+
+      <PrevNext prev={prev} next={next} />
     </Layout>
   )
 }
@@ -28,17 +31,9 @@ const SingleBlog = ({ frontmatter, markdownBody }) => {
 export default SingleBlog
 
 export async function getStaticPaths() {
-  const blogSlugs = ((context) => {
-    const keys = context.keys()
-    const data = keys.map((key, index) => {
-      let slug = key.replace(/^.*[\\\/]/, '').slice(0, -3)
+  const { orderedBlogs } = await getAllBlogs()
 
-      return slug
-    })
-    return data
-  })(require.context('../../data', true, /\.md$/))
-
-  const paths = blogSlugs.map((blogSlug) => `/blog/${blogSlug}`)
+  const paths = orderedBlogs.map((orderedBlog) => `/blog/${orderedBlog.slug}`)
 
   return {
     paths: paths,
@@ -47,14 +42,23 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context) {
-  const { slug } = context.params
-  const data = await import(`../../data/${slug}.md`)
-  const singleDocument = matter(data.default)
+  const { singleDocument } = await getSingleBlog(context)
+
+  // 前に戻る/次に進むボタン押下時のページ遷移先idを取得
+  const { orderedBlogs } = await getAllBlogs()
+  const prev = orderedBlogs.filter(orderedBlog => {
+    return orderedBlog.frontmatter.id === singleDocument.data.id - 1
+  })
+  const next = orderedBlogs.filter(orderedBlog => {
+    return orderedBlog.frontmatter.id === singleDocument.data.id + 1
+  })
 
   return {
     props: {
       frontmatter: singleDocument.data,
       markdownBody: singleDocument.content,
+      prev,
+      next,
     },
   }
 }
